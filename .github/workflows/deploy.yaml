@@ -1,0 +1,30 @@
+name: Deploy Calculator
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install Node Dependencies
+        run: npm install
+      - name: Build Node Application
+        run: npm run build
+      - name: Set env
+        run: |
+          echo '{ "version": "'${GITHUB_REF#refs/*/}'", "commit": "'${GITHUB_SHA::8}'", "date":"'$(git show -s --format=%as ${GITHUB_SHA::8})'" }' > ./dist/version.json
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_CREDENTIALS_PRODUCTION_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_CREDENTIALS_PRODUCTION_KEY }}
+          aws-region: eu-central-1
+      - name: Sync S3
+        run: aws s3 sync ./dist s3://${{ secrets.AWS_BUCKET_NAME }} --delete
