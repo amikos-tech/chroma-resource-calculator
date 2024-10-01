@@ -72,9 +72,9 @@ export function Dashboard() {
                 <main
                     className="grid gap-4 overflow-auto lg:grid-cols-2 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
                     <div
-                        className="relative hidden flex-col items-start gap-8 md:flex"
+                        className="relative h-full hidden flex-col items-start gap-8 md:flex bg-muted/50 rounded-xl"
                     >
-                        <form className="grid w-full gap-6 lg:grid-cols-2 items-start md-2 pt-4">
+                        <form className="grid w-full gap-2 lg:grid-cols-2 items-start md-2 p-2">
                             <fieldset
                                 className="grid gap-6 rounded-lg border p-4 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
                                 <legend className="-ml-1 px-1 text-sm font-medium">
@@ -138,7 +138,7 @@ export function Dashboard() {
                                                                           absoluteStrokeWidth/>) <Info
                                                             className="h-3.5 w-3.5 ml-1"/></Label>
                                                     <Input id="chunkOverlap" type="number"
-                                                           defaultValue={calculationMetrics.chunkOverlap}
+                                                           value={calculationMetrics.chunkOverlap}
                                                            onChange={(e) => {
                                                                setCalculationMetrics({
                                                                    ...calculationMetrics,
@@ -235,7 +235,6 @@ export function Dashboard() {
                                     <div></div>
                                 </div>
                             </fieldset>
-
                             <div>
                                 <fieldset
                                     className="grid gap-6 rounded-lg border p-4 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50">
