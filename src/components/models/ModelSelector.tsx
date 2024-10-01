@@ -15,7 +15,7 @@ import {
     Popover,
     PopoverContent, PopoverTrigger,
 } from "@/components/ui/popover"
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Button} from "@/components/ui/button.tsx";
 import {EmbeddingModel} from "@/types/types.ts";
 
@@ -24,9 +24,58 @@ const models: EmbeddingModel[] = [
         name:"bert-base-uncased",
         vendor:"huggingface",
         dimensionality: 384,
+        contextSize: 256,
         id: "hf-bert-base-uncased-384",
         description: "A BERT model pre-trained on English text.",
         architecture: "Transformer",
+    },
+    {
+        name: "Embed-english-v3.0",
+        vendor: "Cohere",
+        dimensionality: 1024,
+        contextSize: 512,
+        id: "embed-english-v3.0",
+        version: "3.0",
+        tokenizer: "Cohere tokenizer",
+        description: "General purpose English language embedding model",
+        variableDimensionality: false,
+        architecture: "Transformer"
+    },
+    {
+        name: "Embed-english-light-v3.0",
+        vendor: "Cohere",
+        dimensionality: 384,
+        contextSize: 512,
+        id: "embed-english-light-v3.0",
+        version: "3.0",
+        tokenizer: "Cohere tokenizer",
+        description: "Lighter version of the English language embedding model",
+        variableDimensionality: false,
+        architecture: "Transformer"
+    },
+    {
+        name: "Embed-multilingual-v3.0",
+        vendor: "Cohere",
+        dimensionality: 1024,
+        contextSize: 512,
+        id: "embed-multilingual-v3.0",
+        version: "3.0",
+        tokenizer: "Cohere multilingual tokenizer",
+        description: "Multilingual embedding model supporting 100+ languages",
+        variableDimensionality: false,
+        architecture: "Transformer"
+    },
+    {
+        name: "text-embedding-ada-002",
+        vendor: "OpenAI",
+        dimensionality: 1536,
+        contextSize: 8191,
+        id: "text-embedding-ada-002",
+        version: "002",
+        tokenizer: "GPT-3 tokenizer",
+        description: "General purpose embedding model for text",
+        variableDimensionality: false,
+        architecture: "Transformer"
     },
 ]
 
@@ -38,13 +87,10 @@ interface ModelSelectorProps {
 }
 
 export function ModelSelector({ initialValue="", onChange, isOpen, setIsOpen }: ModelSelectorProps) {
-    const [value, setValue] = useState(initialValue)
-    useEffect(() => {
-        console.log(isOpen)
-    }, [isOpen]);
+    const [value,setValue] = useState(initialValue)
     return (
         <Popover open={isOpen} onOpenChange={setIsOpen}>
-            <PopoverTrigger>
+            <PopoverTrigger asChild>
                 <Button
                     type="button"
                     variant="outline"
@@ -66,9 +112,9 @@ export function ModelSelector({ initialValue="", onChange, isOpen, setIsOpen }: 
                                 <CommandItem
                                     key={model.id}
                                     value={model.name}
-                                    onSelect={(currentValue) => {
+                                    onSelect={() => {
                                         onChange(model)
-                                        setValue(currentValue === value ? "" : currentValue)
+                                        setValue(model.name)
                                         setIsOpen(false)
                                     }}
                                 >
